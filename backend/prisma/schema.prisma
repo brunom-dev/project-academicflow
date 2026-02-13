@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StatusPeriod {
+    ACTIVE
+    COMPLETED
+    PLANNED
+}
+
+model AcademicPeriod {
+    id Int @id @default(autoincrement())
+    label String
+    startDate DateTime
+    endDate DateTime
+    status StatusPeriod @default(ACTIVE)
+
+    enrollments Enrollment[]
+}
+
+//? --------------------
+
+enum GradingSystem {
+    ARITHMETIC
+    WEIGHTED
+    CUSTOM
+}
+
+enum StatusEnrollment {
+    IN_PROGRESS
+    APPROVED
+    FAILED
+}
+
+model Enrollment {
+    id Int @id @default(autoincrement())
+    gradingSystem GradingSystem @default(ARITHMETIC)
+    finalAverage Float?
+    status StatusEnrollment @default(IN_PROGRESS)
+    grades Grade[]
+
+    periodId Int
+    period AcademicPeriod @relation(fields: [periodId], references: [id])
+
+    courseId Int
+    course Course @relation(fields: [courseId], references: [id])
+
+    studyTasks StudyTask[]
+}
+
+//? --------------------
+
+enum CourseType {
+    REQUIRED
+    ELECTIVE
+}
+
+model Course {
+    id Int @id @default(autoincrement())
+    code String @unique
+    name String
+    semesterLevel Int
+    credits Int
+    type CourseType @default(REQUIRED)
+
+    enrollments Enrollment[]
+}
+
+//? --------------------
+
+model Grade {
+    id Int @id @default(autoincrement())
+    name String
+    obtainedValue Float?
+    maxValue Float @default(10.0)
+    weight Float @default(1.0)
+    date DateTime?
+
+    enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+    enrollmentId Int
+
+    studyTasks StudyTask[]
+}
+
+//? --------------------
+
+model StudyTask {
+    id Int @id @default(autoincrement())
+    title String
+    description String?
+    targetDate DateTime
+    startDate DateTime?
+    endDate DateTime?
+    isCompleted Boolean @default(false)
+
+    enrollmentId Int
+    enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+
+    gradeId Int?
+    grade Grade? @relation(fields: [gradeId], references: [id])
+}
+
+
+
