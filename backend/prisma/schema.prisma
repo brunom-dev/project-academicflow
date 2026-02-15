@@ -45,9 +45,10 @@ enum StatusEnrollment {
 model Enrollment {
     id Int @id @default(autoincrement())
     gradingSystem GradingSystem @default(ARITHMETIC)
-    finalAverage Float?
     status StatusEnrollment @default(IN_PROGRESS)
     grades Grade[]
+    currentAverage Float?
+    finalAverage Float?
 
     periodId Int
     period AcademicPeriod @relation(fields: [periodId], references: [id])
