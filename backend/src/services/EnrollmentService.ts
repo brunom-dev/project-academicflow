@@ -67,4 +67,42 @@ export class EnrollmentService {
             },
         });
     }
+
+    async calculateCurrentAverage(enrollmentId: number) {
+        const enrollment =  await prisma.enrollment.findUnique({
+            where: {id: enrollmentId},
+            include: { grades: true }
+        })
+
+        if (!enrollment)
+            throw new Error('Matricula não encontrada');
+
+        const completedGrades = enrollment.grades.filter(grade => grade.obtainedValue !== null);
+
+        if (completedGrades.length === 0) { 
+            await prisma.enrollment.update({
+                where: {id: enrollmentId},
+                data: {currentAverage: null}
+            })
+
+            return null;
+        }
+         
+        let totalPoints: number = 0 
+        let totalWeights: number = 0;
+
+        completedGrades.forEach((grade) => {
+            totalPoints += Number(grade.obtainedValue) * grade.weight;
+            totalWeights += grade.weight;
+        })
+
+        const currentAverage = totalPoints / totalWeights;
+
+        await prisma.enrollment.update({
+            where: {id: enrollmentId},
+            data: {currentAverage}
+        })
+
+        return currentAverage;
+    }
 }

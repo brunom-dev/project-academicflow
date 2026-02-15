@@ -5,7 +5,7 @@ export class GradeController {
     constructor(private gradeService: GradeService) {}
 
     async updateGrade(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id_enrollment, id_grade } = req.params;
         const { name, obtainedValue, maxValue, weight, date } = req.body;
 
         if (
@@ -19,13 +19,17 @@ export class GradeController {
                 .status(400)
                 .json({ error: "Não há modificações para atualizar." });
 
-        const gradeUpdated = await this.gradeService.update(Number(id), {
-            name,
-            obtainedValue,
-            maxValue,
-            weight,
-            date,
-        });
+        const gradeUpdated = await this.gradeService.update(
+            Number(id_grade),
+            Number(id_enrollment),
+            {
+                name,
+                obtainedValue,
+                maxValue,
+                weight,
+                date,
+            },
+        );
 
         return res.status(200).json(gradeUpdated);
     }
