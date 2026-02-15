@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
+        "module": "esnext",
         "target": "es2020",
-        "module": "commonjs",
         "lib": ["es2020"],
         "strict": true,
         "esModuleInterop": true,
@@ -11,6 +11,6 @@
         "rootDir": "./src",
         "resolveJsonModule": true
     },
-    "include": ["src/**/*", "src/prisma/client.ts"],
+    "include": ["src/**/*", "src/lib/prisma.ts"],
     "exclude": ["node_modules"]
 }
