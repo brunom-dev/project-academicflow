@@ -10,7 +10,6 @@ import cors from "cors";
 import { periodRoutes } from "./routes/period.routes";
 import { courseRoutes } from "./routes/course.routes";
 import { enrollmentRoutes } from "./routes/enrollment.routes";
-import { gradeRoutes } from "./routes/grade.routes";
 
 const app = express();
 
@@ -20,7 +19,6 @@ app.use(cors({ origin: "*" }));
 app.use("/periods", periodRoutes);
 app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
-app.use("/grades", gradeRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof Error) {
