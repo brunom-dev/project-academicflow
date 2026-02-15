@@ -86,8 +86,10 @@ model Grade {
     weight Float @default(1.0)
     date DateTime?
 
-    enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
     enrollmentId Int
+    enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+    @@unique([name, enrollmentId])
 
     studyTasks StudyTask[]
 }
