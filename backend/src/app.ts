@@ -10,6 +10,7 @@ import cors from "cors";
 import { periodRoutes } from "./routes/period.routes";
 import { courseRoutes } from "./routes/course.routes";
 import { enrollmentRoutes } from "./routes/enrollment.routes";
+import { gradeRoutes } from "./routes/grade.routes";
 
 const app = express();
 
@@ -17,10 +18,10 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 app.use("/periods", periodRoutes);
-app.use("/course", courseRoutes);
-app.use("/enrollment", enrollmentRoutes);
+app.use("/courses", courseRoutes);
+app.use("/enrollments", enrollmentRoutes);
+app.use("/grades", gradeRoutes);
 
-// Middleware de Erro Global
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof Error) {
         return res.status(400).json({
