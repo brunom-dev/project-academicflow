@@ -1,4 +1,4 @@
-import { prisma } from "../prisma/client";
+import { prisma } from "../lib/prisma";
 import { CourseType } from "@prisma/client";
 
 interface CreateCourseDTO {
@@ -10,28 +10,34 @@ interface CreateCourseDTO {
 }
 
 export class CourseService {
-    async create({ code, name, semesterLevel, credits, type }: CreateCourseDTO) {
-
+    async create({
+        code,
+        name,
+        semesterLevel,
+        credits,
+        type,
+    }: CreateCourseDTO) {
         const isAlreadyExists = await prisma.course.findUnique({
-            where: { code }
+            where: { code },
         });
 
-        if (isAlreadyExists) throw new Error('Já existe uma disciplina com este código.');
+        if (isAlreadyExists)
+            throw new Error("Já existe uma disciplina com este código.");
 
         return await prisma.course.create({
             data: {
-                code, 
-                name, 
+                code,
+                name,
                 credits,
-                semesterLevel, 
-                type
-            }
-        })
+                semesterLevel,
+                type,
+            },
+        });
     }
 
     async list() {
         return await prisma.course.findMany({
-            orderBy: {semesterLevel: 'asc'}
+            orderBy: { semesterLevel: "asc" },
         });
     }
 }

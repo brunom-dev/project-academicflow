@@ -1,5 +1,5 @@
-import { prisma } from '../prisma/client';
-import { StatusPeriod } from '@prisma/client'
+import { prisma } from "../lib/prisma";
+import { StatusPeriod } from "@prisma/client";
 
 interface CreatePeriodDTO {
     label: string;
@@ -8,37 +8,41 @@ interface CreatePeriodDTO {
 }
 
 export class PeriodService {
-    async create({label, startDate, endDate}: CreatePeriodDTO) {
-        const periodAlreadyExists: boolean = Boolean(await prisma.academicPeriod.findFirst({where: {label: label}}));
+    async create({ label, startDate, endDate }: CreatePeriodDTO) {
+        const periodAlreadyExists: boolean = Boolean(
+            await prisma.academicPeriod.findFirst({ where: { label: label } }),
+        );
 
-        if (periodAlreadyExists) throw new Error('Periodo já existe.');
+        if (periodAlreadyExists) throw new Error("Periodo já existe.");
 
-        if (new Date(endDate) <= new Date(startDate)) throw new Error('A data final deve ser maior que a data inicial.');
+        if (new Date(endDate) <= new Date(startDate))
+            throw new Error("A data final deve ser maior que a data inicial.");
 
         return await prisma.academicPeriod.create({
-            data: { 
+            data: {
                 label,
                 startDate: new Date(startDate),
-                endDate: new Date(endDate)
-            }
-        })
+                endDate: new Date(endDate),
+            },
+        });
     }
 
     async list() {
         return await prisma.academicPeriod.findMany({
-            orderBy: { startDate: 'desc'}
-        }) 
+            orderBy: { startDate: "desc" },
+        });
     }
 
     async updateStatus(id: number, status: StatusPeriod) {
-        const period = await prisma.academicPeriod.findUnique({where: { id }});
-            
+        const period = await prisma.academicPeriod.findUnique({
+            where: { id },
+        });
+
         if (!period) throw new Error("Periodo não encontrado!");
 
         return await prisma.academicPeriod.update({
             where: { id },
-            data: { status }
-        })
+            data: { status },
+        });
     }
-
 }
