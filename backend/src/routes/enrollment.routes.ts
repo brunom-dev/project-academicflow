@@ -6,7 +6,9 @@ import { GradeController } from "../controllers/GradeController";
 import { GradeService } from "../services/GradeService";
 
 const enrollmentService: EnrollmentService = new EnrollmentService();
-const enrollmentController: EnrollmentController = new EnrollmentController(enrollmentService);
+const enrollmentController: EnrollmentController = new EnrollmentController(
+    enrollmentService,
+);
 const gradeService = new GradeService();
 const gradeController = new GradeController(gradeService);
 
@@ -21,9 +23,11 @@ enrollmentRoutes.post("/", (req: Request, res: Response) =>
 
 enrollmentRoutes.patch(
     "/:id_enrollment/grades/:id_grade",
-    (req: Request, res: Response) => gradeController.updateGrade(req, res)
+    (req: Request, res: Response) => gradeController.updateGrade(req, res),
 );
 
-
+enrollmentRoutes.patch("/:id/finish", (req: Request, res: Response) =>
+    enrollmentController.finish(req, res),
+);
 
 export { enrollmentRoutes };

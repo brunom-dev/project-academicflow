@@ -1,6 +1,5 @@
 import { prisma } from "../lib/prisma";
-import { GradingSystem, StatusEnrollment } from "@prisma/client";
-import { calculateAverage } from "../utils/calculateAverage";
+import { GradingSystem, StatusEnrollment, Grade } from "@prisma/client";
 
 interface CreateEnrollmentDTO {
     periodId: number;
@@ -10,6 +9,18 @@ interface CreateEnrollmentDTO {
 }
 
 export class EnrollmentService {
+    private calculateAverage(grades: Grade[]): number {
+        let totalPoints: number = 0;
+        let totalWeights: number = 0;
+
+        grades.forEach((grade) => {
+            totalPoints += Number(grade.obtainedValue) * grade.weight;
+            totalWeights += grade.weight;
+        });
+
+        return totalWeights > 0 ? totalPoints / totalWeights : 0;
+    }
+
     async enroll({
         periodId,
         courseId,
@@ -90,7 +101,7 @@ export class EnrollmentService {
             return null;
         }
 
-        const currentAverage = calculateAverage(completedGrades);
+        const currentAverage = this.calculateAverage(completedGrades);
 
         await prisma.enrollment.update({
             where: { id: enrollmentId },
@@ -111,25 +122,29 @@ export class EnrollmentService {
                 "Erro ao finalizar disciplina: A disciplina não foi encontrada.",
             );
 
-        const hasPendingGrade: boolean = enrollment.grades.some(grade => grade.obtainedValue === null);
+        const hasPendingGrade: boolean = enrollment.grades.some(
+            (grade) => grade.obtainedValue === null,
+        );
 
-        if (hasPendingGrade) 
-            throw new Error('Erro ao finalizar disciplina: Há provas pendentes.');
+        if (hasPendingGrade)
+            throw new Error(
+                "Erro ao finalizar disciplina: Há provas pendentes.",
+            );
 
-        const finalAverage = calculateAverage(enrollment.grades);
+        const finalAverage = this.calculateAverage(enrollment.grades);
 
-        const result: StatusEnrollment = finalAverage >= 7 ? 'APPROVED' : 'FAILED'; 
+        const result: StatusEnrollment =
+            finalAverage >= 7 ? "APPROVED" : "FAILED";
 
         // todo - (REFACTOR) add possibilidade de AVF. (>= 4 and < 7) => +1 grade;
 
         const enrollmentFinish = await prisma.enrollment.update({
             where: { id: enrollmentId },
-            data: { 
+            data: {
                 finalAverage,
-                status:  result
-            
+                status: result,
             },
-            include: { 
+            include: {
                 grades: true,
                 period: true,
                 course: true,
