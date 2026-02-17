@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
-import { GradingSystem } from "@prisma/client";
+import { GradingSystem, StatusEnrollment } from "@prisma/client";
+import { calculateAverage } from "../utils/calculateAverage";
 
 interface CreateEnrollmentDTO {
     periodId: number;
@@ -69,40 +70,72 @@ export class EnrollmentService {
     }
 
     async calculateCurrentAverage(enrollmentId: number) {
-        const enrollment =  await prisma.enrollment.findUnique({
-            where: {id: enrollmentId},
-            include: { grades: true }
-        })
+        const enrollment = await prisma.enrollment.findUnique({
+            where: { id: enrollmentId },
+            include: { grades: true },
+        });
 
-        if (!enrollment)
-            throw new Error('Matricula não encontrada');
+        if (!enrollment) throw new Error("Matricula não encontrada");
 
-        const completedGrades = enrollment.grades.filter(grade => grade.obtainedValue !== null);
+        const completedGrades = enrollment.grades.filter(
+            (grade) => grade.obtainedValue !== null,
+        );
 
-        if (completedGrades.length === 0) { 
+        if (completedGrades.length === 0) {
             await prisma.enrollment.update({
-                where: {id: enrollmentId},
-                data: {currentAverage: null}
-            })
+                where: { id: enrollmentId },
+                data: { currentAverage: null },
+            });
 
             return null;
         }
-         
-        let totalPoints: number = 0 
-        let totalWeights: number = 0;
 
-        completedGrades.forEach((grade) => {
-            totalPoints += Number(grade.obtainedValue) * grade.weight;
-            totalWeights += grade.weight;
-        })
-
-        const currentAverage = totalPoints / totalWeights;
+        const currentAverage = calculateAverage(completedGrades);
 
         await prisma.enrollment.update({
-            where: {id: enrollmentId},
-            data: {currentAverage}
-        })
+            where: { id: enrollmentId },
+            data: { currentAverage },
+        });
 
         return currentAverage;
+    }
+
+    async finishEnrollment(enrollmentId: number) {
+        const enrollment = await prisma.enrollment.findFirst({
+            where: { id: enrollmentId },
+            include: { grades: true },
+        });
+
+        if (!enrollment)
+            throw new Error(
+                "Erro ao finalizar disciplina: A disciplina não foi encontrada.",
+            );
+
+        const hasPendingGrade: boolean = enrollment.grades.some(grade => grade.obtainedValue === null);
+
+        if (hasPendingGrade) 
+            throw new Error('Erro ao finalizar disciplina: Há provas pendentes.');
+
+        const finalAverage = calculateAverage(enrollment.grades);
+
+        const result: StatusEnrollment = finalAverage >= 7 ? 'APPROVED' : 'FAILED'; 
+
+        // todo - (REFACTOR) add possibilidade de AVF. (>= 4 and < 7) => +1 grade;
+
+        const enrollmentFinish = await prisma.enrollment.update({
+            where: { id: enrollmentId },
+            data: { 
+                finalAverage,
+                status:  result
+            
+            },
+            include: { 
+                grades: true,
+                period: true,
+                course: true,
+            },
+        });
+
+        return enrollmentFinish;
     }
 }
