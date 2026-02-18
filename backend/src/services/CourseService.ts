@@ -1,6 +1,5 @@
-import { CreateCourseDTO } from "../dto/modules/course/CreateCourseDTO";
+import { CreateCourseDTO } from "../dto/course/CreateCourseDTO";
 import { prisma } from "../lib/prisma";
-
 
 export class CourseService {
     async create({

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { CourseService } from "../services/CourseService";
 import { CourseType } from "@prisma/client";
-import { CreateCourseDTO } from "../dto/modules/course/CreateCourseDTO";
+import { CreateCourseDTO } from "../dto/course/CreateCourseDTO";
 
 
 export class CourseController {
