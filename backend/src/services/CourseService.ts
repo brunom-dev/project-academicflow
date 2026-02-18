@@ -1,4 +1,5 @@
 import { CreateCourseDTO } from "../dto/course/CreateCourseDTO";
+import { AppError } from "../errors/AppError";
 import { prisma } from "../lib/prisma";
 
 export class CourseService {
@@ -14,7 +15,7 @@ export class CourseService {
         });
 
         if (isAlreadyExists)
-            throw new Error("Já existe uma disciplina com este código.");
+            throw new AppError("Já existe uma disciplina com este código.", 409);
 
         return await prisma.course.create({
             data: {

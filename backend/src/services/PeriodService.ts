@@ -1,5 +1,6 @@
 import { CreatePeriodDTO } from "../dto/period/CreatePeriodDTO";
 import { UpdatePeriodDTO } from "../dto/period/UpdatePeriodDTO";
+import { AppError } from "../errors/AppError";
 import { prisma } from "../lib/prisma";
 
 export class PeriodService {
@@ -8,10 +9,13 @@ export class PeriodService {
             await prisma.academicPeriod.findFirst({ where: { label: label } }),
         );
 
-        if (periodAlreadyExists) throw new Error("Periodo já existe.");
+        if (periodAlreadyExists) throw new AppError("Periodo já existe.", 409);
 
         if (new Date(endDate) <= new Date(startDate))
-            throw new Error("A data final deve ser maior que a data inicial.");
+            throw new AppError(
+                "A data final deve ser maior que a data inicial.",
+                400,
+            );
 
         return await prisma.academicPeriod.create({
             data: {
@@ -33,7 +37,7 @@ export class PeriodService {
             where: { id },
         });
 
-        if (!period) throw new Error("Periodo não encontrado!");
+        if (!period) throw new AppError("Periodo não encontrado!", 404);
 
         return await prisma.academicPeriod.update({
             where: { id },

@@ -1,8 +1,7 @@
 import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
+import { AppError } from "../errors/AppError";
 import { prisma } from "../lib/prisma";
 import { StatusEnrollment, Grade } from "@prisma/client";
-
-
 
 export class EnrollmentService {
     private calculateAverage(grades: Grade[]): number {
@@ -31,8 +30,9 @@ export class EnrollmentService {
         });
 
         if (alreadyEnrolled)
-            throw new Error(
+            throw new AppError(
                 "Aluno já matriculado nesta disciplina nesse periodo",
+                409,
             );
 
         const gradesToCreate = [];
@@ -82,7 +82,7 @@ export class EnrollmentService {
             include: { grades: true },
         });
 
-        if (!enrollment) throw new Error("Matricula não encontrada");
+        if (!enrollment) throw new AppError("Matricula não encontrada", 404);
 
         const completedGrades = enrollment.grades.filter(
             (grade) => grade.obtainedValue !== null,
@@ -113,19 +113,13 @@ export class EnrollmentService {
             include: { grades: true },
         });
 
-        if (!enrollment)
-            throw new Error(
-                "Erro ao finalizar disciplina: A disciplina não foi encontrada.",
-            );
+        if (!enrollment) throw new AppError("Matricula não encontrada.", 404);
 
         const hasPendingGrade: boolean = enrollment.grades.some(
             (grade) => grade.obtainedValue === null,
         );
 
-        if (hasPendingGrade)
-            throw new Error(
-                "Erro ao finalizar disciplina: Há provas pendentes.",
-            );
+        if (hasPendingGrade) throw new AppError("Há provas pendentes.", 400);
 
         const finalAverage = this.calculateAverage(enrollment.grades);
 
