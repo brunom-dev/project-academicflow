@@ -1,9 +1,7 @@
-import { app } from './app';
+import { app } from "./app";
 
-
-
-const PORT = 8080;
+const PORT = process.env.BACK_END_PORT;
 
 app.listen(PORT, () => {
-    console.log(`\nServidor rodando em http://localhost:${PORT}`);
-})
+    console.log(`\nServidor ON...`);
+});
