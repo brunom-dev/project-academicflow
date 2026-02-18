@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import {
-    CreateTaskDTO,
-    TaskService,
-} from "../services/TaskService";
+import { TaskService } from "../services/TaskService";
+import { CreateTaskDTO } from "../dto/task/CreateTaskDTO";
 
 export class TaskController {
     constructor(private taskService: TaskService) {}
@@ -19,14 +17,14 @@ export class TaskController {
         }: CreateTaskDTO = req.body;
 
         const task = await this.taskService.create({
-            title, 
+            title,
             description,
-            targetDate, 
+            targetDate,
             startDate,
             endDate,
             enrollmentId,
-            gradeId
-        })
+            gradeId,
+        });
 
         return res.status(201).json(task);
     }
@@ -41,7 +39,10 @@ export class TaskController {
         const { id } = req.params;
         const { completed } = req.body;
 
-        const taskUpdated = await this.taskService.markAsCompleted(Number(id), completed);
+        const taskUpdated = await this.taskService.markAsCompleted(
+            Number(id),
+            completed,
+        );
 
         return res.status(200).json(taskUpdated);
     }
