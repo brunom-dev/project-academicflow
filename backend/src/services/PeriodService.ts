@@ -1,11 +1,7 @@
+import { CreatePeriodDTO } from "../dto/period/CreatePeriodDTO";
+import { UpdatePeriodDTO } from "../dto/period/UpdatePeriodDTO";
 import { prisma } from "../lib/prisma";
 import { StatusPeriod } from "@prisma/client";
-
-interface CreatePeriodDTO {
-    label: string;
-    startDate: string;
-    endDate: string;
-}
 
 export class PeriodService {
     async create({ label, startDate, endDate }: CreatePeriodDTO) {
@@ -33,7 +29,7 @@ export class PeriodService {
         });
     }
 
-    async updateStatus(id: number, status: StatusPeriod) {
+    async updateStatus(id: number, { status }: UpdatePeriodDTO) {
         const period = await prisma.academicPeriod.findUnique({
             where: { id },
         });
