@@ -1,13 +1,6 @@
+import { CreateCourseDTO } from "../dto/modules/course/CreateCourseDTO";
 import { prisma } from "../lib/prisma";
-import { CourseType } from "@prisma/client";
 
-interface CreateCourseDTO {
-    code: string;
-    name: string;
-    semesterLevel: number;
-    credits: number;
-    type: CourseType;
-}
 
 export class CourseService {
     async create({

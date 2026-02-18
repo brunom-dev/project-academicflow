@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { CourseService } from "../services/CourseService";
 import { CourseType } from "@prisma/client";
+import { CreateCourseDTO } from "../dto/modules/course/CreateCourseDTO";
 
 
 export class CourseController {
@@ -13,7 +14,7 @@ export class CourseController {
 
     async create(req: Request, res: Response) {
 
-        const {code, name, semesterLevel, credits, type} = req.body;
+        const {code, name, semesterLevel, credits, type}: CreateCourseDTO = req.body;
 
         if (!(Object.values(CourseType).includes(type))) {
             return res.status(400).json({
