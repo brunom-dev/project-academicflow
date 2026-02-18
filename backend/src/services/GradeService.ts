@@ -1,13 +1,6 @@
 import { prisma } from "../lib/prisma";
 import { EnrollmentService } from "./EnrollmentService";
-
-interface UpdateGradeDTO {
-    name?: string;
-    obtainedValue?: number;
-    maxValue?: number;
-    weight?: number;
-    date?: Date;
-}
+import { UpdateGradeDTO } from "../dto/grade/UpdateGradeDTO";
 
 export class GradeService {
 
