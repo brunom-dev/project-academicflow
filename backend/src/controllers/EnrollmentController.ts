@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { EnrollmentService } from "../services/EnrollmentService";
+import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
 
 export class EnrollmentController {
     private enrollmentService: EnrollmentService = new EnrollmentService();
@@ -9,7 +10,7 @@ export class EnrollmentController {
     }
 
     async enroll(req: Request, res: Response) {
-        const { courseId, periodId, totalExams, gradingSystem } = req.body;
+        const { courseId, periodId, totalExams, gradingSystem }: CreateEnrollmentDTO = req.body;
 
         const enrollCreated = await this.enrollmentService.enroll({
             periodId,

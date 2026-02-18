@@ -1,7 +1,6 @@
 import { CreatePeriodDTO } from "../dto/period/CreatePeriodDTO";
 import { UpdatePeriodDTO } from "../dto/period/UpdatePeriodDTO";
 import { prisma } from "../lib/prisma";
-import { StatusPeriod } from "@prisma/client";
 
 export class PeriodService {
     async create({ label, startDate, endDate }: CreatePeriodDTO) {

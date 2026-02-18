@@ -1,12 +1,8 @@
+import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
 import { prisma } from "../lib/prisma";
-import { GradingSystem, StatusEnrollment, Grade } from "@prisma/client";
+import { StatusEnrollment, Grade } from "@prisma/client";
 
-interface CreateEnrollmentDTO {
-    periodId: number;
-    courseId: number;
-    totalExams: number;
-    gradingSystem: GradingSystem;
-}
+
 
 export class EnrollmentService {
     private calculateAverage(grades: Grade[]): number {
