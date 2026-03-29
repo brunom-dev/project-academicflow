@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GradeService } from "../services/GradeService";
+import { GradeService } from "../services/grade.service";
 import { UpdateGradeDTO } from "../dto/grade/UpdateGradeDTO";
 
 export class GradeController {
@@ -7,7 +7,8 @@ export class GradeController {
 
     async updateGrade(req: Request, res: Response) {
         const { id_enrollment, id_grade } = req.params;
-        const { name, obtainedValue, maxValue, weight, date }: UpdateGradeDTO = req.body;
+        const { name, obtainedValue, maxValue, weight, date }: UpdateGradeDTO =
+            req.body;
 
         if (
             name === undefined &&

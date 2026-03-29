@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TaskService } from "../services/TaskService";
+import { TaskService } from "../services/task.service";
 import { CreateTaskDTO } from "../dto/task/CreateTaskDTO";
 
 export class TaskController {

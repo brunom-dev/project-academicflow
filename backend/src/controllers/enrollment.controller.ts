@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { EnrollmentService } from "../services/EnrollmentService";
+import { EnrollmentService } from "../services/enrollment.service";
 import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
 
 export class EnrollmentController {
@@ -10,7 +10,12 @@ export class EnrollmentController {
     }
 
     async enroll(req: Request, res: Response) {
-        const { courseId, periodId, totalExams, gradingSystem }: CreateEnrollmentDTO = req.body;
+        const {
+            courseId,
+            periodId,
+            totalExams,
+            gradingSystem,
+        }: CreateEnrollmentDTO = req.body;
 
         const enrollCreated = await this.enrollmentService.enroll({
             periodId,
@@ -34,7 +39,8 @@ export class EnrollmentController {
     async finish(req: Request, res: Response) {
         const { id } = req.params;
 
-        const enrollmentFinished = await this.enrollmentService.finishEnrollment(Number(id));
+        const enrollmentFinished =
+            await this.enrollmentService.finishEnrollment(Number(id));
 
         return res.status(200).json(enrollmentFinished);
     }

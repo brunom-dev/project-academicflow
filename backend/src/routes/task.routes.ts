@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import { TaskController } from "../controllers/TaskController";
-import { TaskService } from "../services/TaskService";
+import { TaskController } from "../controllers/task.controller";
+import { TaskService } from "../services/task.service";
 
 const taskRoutes = Router();
 

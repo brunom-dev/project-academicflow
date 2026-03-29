@@ -1,9 +1,9 @@
 import { Request, Response, Router } from "express";
-import { EnrollmentController } from "../controllers/EnrollmentController";
-import { EnrollmentService } from "../services/EnrollmentService";
+import { EnrollmentController } from "../controllers/enrollment.controller";
+import { EnrollmentService } from "../services/enrollment.service";
 
-import { GradeController } from "../controllers/GradeController";
-import { GradeService } from "../services/GradeService";
+import { GradeController } from "../controllers/grade.controller";
+import { GradeService } from "../services/grade.service";
 
 const enrollmentService: EnrollmentService = new EnrollmentService();
 const enrollmentController: EnrollmentController = new EnrollmentController(

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PeriodService } from "../services/PeriodService";
+import { PeriodService } from "../services/period.service";
 import { StatusPeriod } from "@prisma/client";
 import { CreatePeriodDTO } from "../dto/period/CreatePeriodDTO";
 import { UpdatePeriodDTO } from "../dto/period/UpdatePeriodDTO";
