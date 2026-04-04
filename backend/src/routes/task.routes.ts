@@ -11,7 +11,7 @@ taskRoutes.post("/", (req: Request, res: Response) =>
     taskController.create(req, res),
 );
 taskRoutes.get("/", (req: Request, res: Response) =>
-    taskController.listAll(req, res),
+    taskController.list(req, res),
 );
 taskRoutes.patch("/:id/complete", (req: Request, res: Response) =>
     taskController.update(req, res),

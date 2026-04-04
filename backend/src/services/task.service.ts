@@ -1,6 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { AppError } from "../errors/AppError";
 import { CreateTaskDTO } from "../dto/task/CreateTaskDTO";
+import { ParamsTaskDTO } from "../dto/task/ParamsTaskDTO";
 
 export class TaskService {
     async create({
@@ -59,15 +60,29 @@ export class TaskService {
         return taskCreated;
     }
 
-    async listAll() {
+    async list({ title, completed, enrollId }: ParamsTaskDTO) {
         const tasks = await prisma.studyTask.findMany({
+            where: {
+                ...(title && {
+                    title: {
+                        contains: title,
+                        mode: "insensitive",
+                    },
+                }),
+                ...(completed !== undefined && {
+                    isCompleted: completed,
+                }),
+                ...(enrollId && {
+                    enrollmentId: enrollId,
+                }),
+            },
             orderBy: {
-                targetDate: "asc"
+                targetDate: "asc",
             },
             include: {
                 enrollment: true,
-                grade: true
-            }
+                grade: true,
+            },
         });
 
         return tasks;
