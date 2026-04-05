@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { EnrollmentService } from "../services/enrollment.service";
 import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
+import { AppError } from "../errors/AppError";
 
 export class EnrollmentController {
     private enrollmentService: EnrollmentService = new EnrollmentService();
@@ -37,10 +38,33 @@ export class EnrollmentController {
     }
 
     async finish(req: Request, res: Response) {
-        const { id } = req.params;
+        const { id_enrollment } = req.params;
 
         const enrollmentFinished =
-            await this.enrollmentService.finishEnrollment(Number(id));
+            await this.enrollmentService.finishEnrollment(
+                Number(id_enrollment),
+            );
+
+        return res.status(200).json(enrollmentFinished);
+    }
+
+    async avf(req: Request, res: Response) {
+        const { id_enrollment } = req.params;
+        const { finalExamGrade } = req.body;
+
+        if (id_enrollment === undefined)
+            throw new AppError("A matricula é obrigatória", 400);
+
+        if (finalExamGrade === undefined)
+            throw new AppError(
+                "O resultado da avalição final é obrigatória",
+                400,
+            );
+
+        const enrollmentFinished = await this.enrollmentService.avf(
+            Number(id_enrollment),
+            Number(finalExamGrade),
+        );
 
         return res.status(200).json(enrollmentFinished);
     }

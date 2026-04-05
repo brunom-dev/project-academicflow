@@ -16,6 +16,14 @@ export class EnrollmentService {
         return totalWeights > 0 ? totalPoints / totalWeights : 0;
     }
 
+    private finalResult(finalAverage: number): StatusEnrollment {
+        if (finalAverage >= 7 && finalAverage <= 10) return "APPROVED";
+        if (finalAverage >= 4 && finalAverage < 7) return "AVF";
+        if (finalAverage >= 0 && finalAverage < 4) return "FAILED";
+
+        return "IN_PROGRESS";
+    }
+
     async enroll({
         periodId,
         courseId,
@@ -123,10 +131,7 @@ export class EnrollmentService {
 
         const finalAverage = this.calculateAverage(enrollment.grades);
 
-        const result: StatusEnrollment =
-            finalAverage >= 7 ? "APPROVED" : "FAILED";
-
-        // todo - (REFACTOR) add possibilidade de AVF. (>= 4 and < 7) => +1 grade;
+        const result: StatusEnrollment = this.finalResult(finalAverage);
 
         const enrollmentFinish = await prisma.enrollment.update({
             where: { id: enrollmentId },
@@ -142,5 +147,44 @@ export class EnrollmentService {
         });
 
         return enrollmentFinish;
+    }
+
+    async avf(enrollmentId: number, finalExamGrade: number) {
+        const enrollment = await prisma.enrollment.findFirst({
+            where: { id: enrollmentId },
+        });
+
+        if (!enrollment) throw new AppError("Matricula não encontrada.", 404);
+        if (enrollment.status !== "AVF")
+            throw new AppError("Aluno não está de Avaliação final.", 400);
+
+        if (finalExamGrade < 0 || finalExamGrade > 10)
+            throw new AppError(
+                "O resultado da avaliação final deve está no intervalo [0, 10]",
+                400,
+            );
+
+        // MEDIA FINAL = (MEDIA PARCIAL + NOTA AVALIACAO FINAL) / 2
+
+        const finalAverageWithAVF =
+            (Number(enrollment.finalAverage) + finalExamGrade) / 2;
+        const resultWithAVF: StatusEnrollment =
+            finalAverageWithAVF >= 5 ? "APPROVED" : "FAILED";
+
+        const enrollmentFinished = await prisma.enrollment.update({
+            where: { id: enrollmentId },
+            data: {
+                finalExamGrade: finalExamGrade,
+                finalAverage: finalAverageWithAVF,
+                status: resultWithAVF,
+            },
+            include: {
+                grades: true,
+                period: true,
+                course: true,
+            },
+        });
+
+        return enrollmentFinished;
     }
 }

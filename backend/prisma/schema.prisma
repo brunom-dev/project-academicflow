@@ -39,6 +39,7 @@ enum GradingSystem {
 enum StatusEnrollment {
     IN_PROGRESS
     APPROVED
+    AVF
     FAILED
 }
 
@@ -49,6 +50,7 @@ model Enrollment {
     grades Grade[]
     currentAverage Float?
     finalAverage Float?
+    finalExamGrade Float?
 
     periodId Int
     period AcademicPeriod @relation(fields: [periodId], references: [id])
