@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import { PeriodController } from "../controllers/period.controller";
-import { PeriodService } from "../services/period.service";
+import { PeriodController } from "./period.controller";
+import { PeriodService } from "./period.service";
 
 const periodRoutes = Router();
 

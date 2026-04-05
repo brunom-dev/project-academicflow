@@ -7,13 +7,13 @@ import express, {
 } from "express";
 import cors from "cors";
 
-import { AppError } from "./errors/AppError";
+import { AppError } from "./shared/errors/AppError";
 import { periodRoutes } from "./routes/period.routes";
-import { courseRoutes } from "./routes/course.routes";
+import { courseRoutes } from "./modules/course/course.routes";
 import { enrollmentRoutes } from "./routes/enrollment.routes";
 import { taskRoutes } from "./routes/task.routes";
 
-import { dashboardRoutes } from './routes/dashboard.routes'
+import { dashboardRoutes } from "./modules/dashboard/dashboard.routes";
 
 const app = express();
 

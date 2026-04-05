@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import { CourseService } from "../services/course.service";
+import { CourseService } from "./course.service";
 import { CourseType } from "@prisma/client";
-import { CreateCourseDTO } from "../dto/course/CreateCourseDTO";
+import { CreateCourseDTO } from "./course.dto";
 
 export class CourseController {
     private courserService: CourseService;

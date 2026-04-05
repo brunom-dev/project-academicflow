@@ -1,7 +1,6 @@
-import { prisma } from "../lib/prisma";
-import { AppError } from "../errors/AppError";
-import { CreateTaskDTO } from "../dto/task/CreateTaskDTO";
-import { ParamsTaskDTO } from "../dto/task/ParamsTaskDTO";
+import { prisma } from "../../shared/lib/prisma";
+import { AppError } from "../../shared/errors/AppError";
+import { CreateTaskDTO, ParamsTaskDTO } from "./task.dto";
 
 export class TaskService {
     async create({

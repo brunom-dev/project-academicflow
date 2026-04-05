@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { GradeService } from "../services/grade.service";
-import { UpdateGradeDTO } from "../dto/grade/UpdateGradeDTO";
+import { GradeService } from "./grade.service";
+import { UpdateGradeDTO } from "./grade.dto";
 
 export class GradeController {
     constructor(private gradeService: GradeService) {}

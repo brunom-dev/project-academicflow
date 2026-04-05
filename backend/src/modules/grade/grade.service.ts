@@ -1,7 +1,7 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../../shared/lib/prisma";
 import { EnrollmentService } from "./enrollment.service";
-import { UpdateGradeDTO } from "../dto/grade/UpdateGradeDTO";
-import { AppError } from "../errors/AppError";
+import { UpdateGradeDTO } from "./grade.dto";
+import { AppError } from "../../shared/errors/AppError";
 
 export class GradeService {
     private enrollmentService = new EnrollmentService();

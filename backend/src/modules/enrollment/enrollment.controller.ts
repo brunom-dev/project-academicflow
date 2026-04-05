@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { EnrollmentService } from "../services/enrollment.service";
-import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
-import { AppError } from "../errors/AppError";
+import { EnrollmentService } from "./enrollment.service";
+import { CreateEnrollmentDTO } from "./enrollment.dto";
+import { AppError } from "../../shared/errors/AppError";
 
 export class EnrollmentController {
     private enrollmentService: EnrollmentService = new EnrollmentService();

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 
-import { CourseService } from "../services/course.service";
-import { CourseController } from "../controllers/course.controller";
+import { CourseService } from "./course.service";
+import { CourseController } from "./course.controller";
 
 const courserService = new CourseService();
 const courseController = new CourseController(courserService);

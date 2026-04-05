@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { PeriodService } from "../services/period.service";
+import { PeriodService } from "./period.service";
 import { StatusPeriod } from "@prisma/client";
-import { CreatePeriodDTO } from "../dto/period/CreatePeriodDTO";
-import { UpdatePeriodDTO } from "../dto/period/UpdatePeriodDTO";
+import { CreatePeriodDTO } from "./period.dto";
+import { UpdatePeriodDTO } from "./period.dto";
 
 export class PeriodController {
     private periodService: PeriodService;

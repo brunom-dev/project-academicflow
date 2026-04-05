@@ -1,7 +1,6 @@
-import { CreatePeriodDTO } from "../dto/period/CreatePeriodDTO";
-import { UpdatePeriodDTO } from "../dto/period/UpdatePeriodDTO";
-import { AppError } from "../errors/AppError";
-import { prisma } from "../lib/prisma";
+import { CreatePeriodDTO, UpdatePeriodDTO } from "./period.dto";
+import { AppError } from "../../shared/errors/AppError";
+import { prisma } from "../../shared/lib/prisma";
 
 export class PeriodService {
     async create({ label, startDate, endDate }: CreatePeriodDTO) {

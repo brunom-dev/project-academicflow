@@ -11,6 +11,6 @@
         "rootDir": "./src",
         "resolveJsonModule": true
     },
-    "include": ["src/**/*", "src/lib/prisma.ts"],
+    "include": ["src/**/*", "src/shared/lib/prisma.ts"],
     "exclude": ["node_modules"]
 }

@@ -7,3 +7,9 @@ export interface CreateTaskDTO {
     enrollmentId: number;
     gradeId?: number;
 }
+
+export interface ParamsTaskDTO {
+    title?: string;
+    enrollId?: number;
+    completed?: boolean;
+}

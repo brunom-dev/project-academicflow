@@ -1,6 +1,6 @@
-import { CreateEnrollmentDTO } from "../dto/enrollment/CreateEnrollmentDTO";
-import { AppError } from "../errors/AppError";
-import { prisma } from "../lib/prisma";
+import { CreateEnrollmentDTO } from "./enrollment.dto";
+import { AppError } from "../../shared/errors/AppError";
+import { prisma } from "../../shared/lib/prisma";
 import { StatusEnrollment, Grade } from "@prisma/client";
 
 export class EnrollmentService {

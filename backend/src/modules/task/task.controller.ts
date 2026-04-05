@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { TaskService } from "../services/task.service";
-import { CreateTaskDTO } from "../dto/task/CreateTaskDTO";
-
+import { TaskService } from "./task.service";
+import { CreateTaskDTO } from "./task.dto";
 
 export class TaskController {
     constructor(private taskService: TaskService) {}
@@ -31,12 +30,13 @@ export class TaskController {
     }
 
     async list(req: Request, res: Response) {
-        const {title, completed, enrollId} = req.query;
+        const { title, completed, enrollId } = req.query;
 
         const tasks = await this.taskService.list({
-            title: title ? String(title) : undefined, 
-            completed: completed !== undefined ? completed === 'true' : undefined, 
-            enrollId: isNaN(Number(enrollId)) ? undefined : Number(enrollId)
+            title: title ? String(title) : undefined,
+            completed:
+                completed !== undefined ? completed === "true" : undefined,
+            enrollId: isNaN(Number(enrollId)) ? undefined : Number(enrollId),
         });
 
         return res.status(200).json(tasks);
