@@ -1,5 +1,5 @@
 import { prisma } from "../../shared/lib/prisma";
-import { EnrollmentService } from "./enrollment.service";
+import { EnrollmentService } from "../enrollment/enrollment.service";
 import { UpdateGradeDTO } from "./grade.dto";
 import { AppError } from "../../shared/errors/AppError";
 

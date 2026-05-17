@@ -8,10 +8,10 @@ import express, {
 import cors from "cors";
 
 import { AppError } from "./shared/errors/AppError";
-import { periodRoutes } from "./routes/period.routes";
+import { periodRoutes } from "./modules/period/period.routes";
 import { courseRoutes } from "./modules/course/course.routes";
-import { enrollmentRoutes } from "./routes/enrollment.routes";
-import { taskRoutes } from "./routes/task.routes";
+import { enrollmentRoutes } from "./modules/enrollment/enrollment.routes";
+import { taskRoutes } from "./modules/task/task.routes";
 
 import { dashboardRoutes } from "./modules/dashboard/dashboard.routes";
 
