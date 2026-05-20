@@ -12,6 +12,18 @@ datasource db {
   provider = "postgresql"
 }
 
+// auth
+
+model User {
+    id Int @id @default(autoincrement())
+    name String
+    email String @unique
+    password String
+    academicPeriods AcademicPeriod[]
+}
+
+// ---------------------------
+
 enum StatusPeriod {
     ACTIVE
     COMPLETED
@@ -26,6 +38,9 @@ model AcademicPeriod {
     status StatusPeriod @default(ACTIVE)
 
     enrollments Enrollment[]
+
+    userId Int
+    user User @relation(fields: [userId], references: [id])
 }
 
 //? --------------------
