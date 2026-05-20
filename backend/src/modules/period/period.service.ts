@@ -38,6 +38,12 @@ export class PeriodService {
 
         if (!period) throw new AppError("Periodo não encontrado!", 404);
 
+        if (status === "ACTIVE")
+            await prisma.academicPeriod.updateMany({
+                where: { status: "ACTIVE", id: { not: id } },
+                data: { status: "COMPLETED" },
+            });
+
         return await prisma.academicPeriod.update({
             where: { id },
             data: { status },

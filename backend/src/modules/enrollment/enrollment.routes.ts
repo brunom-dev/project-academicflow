@@ -14,7 +14,7 @@ const gradeController = new GradeController(gradeService);
 const enrollmentRoutes = Router();
 
 enrollmentRoutes.get(
-    "/", 
+    "/:id_period", 
     (req: Request, res: Response) => enrollmentController.listByPeriod(req, res),
 );
 

@@ -29,16 +29,19 @@ export class EnrollmentController {
     }
 
     async listByPeriod(req: Request, res: Response) {
-        const { periodId } = req.body;
+        const { id_period } = req.params;
 
         const enrollmentsList =
-            await this.enrollmentService.listByPeriod(periodId);
+            await this.enrollmentService.listByPeriod(Number(id_period));
 
         return res.status(200).json(enrollmentsList);
     }
 
     async finish(req: Request, res: Response) {
         const { id_enrollment } = req.params;
+
+        if (isNaN(Number(id_enrollment)))
+            throw new AppError('ID invalido', 400);
 
         const enrollmentFinished =
             await this.enrollmentService.finishEnrollment(

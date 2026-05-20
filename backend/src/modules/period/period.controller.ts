@@ -3,6 +3,7 @@ import { PeriodService } from "./period.service";
 import { StatusPeriod } from "@prisma/client";
 import { CreatePeriodDTO } from "./period.dto";
 import { UpdatePeriodDTO } from "./period.dto";
+import { AppError } from "../../shared/errors/AppError";
 
 export class PeriodController {
     private periodService: PeriodService;
@@ -32,6 +33,9 @@ export class PeriodController {
         const { id } = req.params;
         const { status }: UpdatePeriodDTO = req.body;
 
+        if (isNaN(Number(id)))
+            throw new AppError  ('ID invalido.', 400)
+        
         if (!Object.values(StatusPeriod).includes(status)) {
             return res.status(400).json({
                 error: "Status inválido.",

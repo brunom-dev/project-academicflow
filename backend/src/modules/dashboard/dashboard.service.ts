@@ -34,6 +34,9 @@ export class DashboardService {
             },
             include: {
                 enrollment: {
+                    where: {
+                      periodId: currentPeriod.id  
+                    },
                     include: {course: true}
                 }
             },
@@ -44,7 +47,7 @@ export class DashboardService {
         })
 
 
-        const dataSumarry = {
+        const dataSummary = {
             currentPeriod: {
                 id: currentPeriod.id,
                 name: currentPeriod.label,
@@ -65,6 +68,6 @@ export class DashboardService {
             }))
         }
 
-        return dataSumarry;
+        return dataSummary;
     }
 }

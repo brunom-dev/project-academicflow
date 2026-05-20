@@ -31,31 +31,19 @@ export class GradeService {
                 404,
             );
 
-        if (
-            obtainedValue !== undefined &&
-            obtainedValue > existingGrade.maxValue
-        )
+        const currentMaxValue =
+            maxValue !== undefined ? maxValue : existingGrade.maxValue;
+
+        if (obtainedValue !== undefined && obtainedValue > currentMaxValue) {
             throw new AppError(
                 "A nota obtida não pode ser maior que o valor máximo.",
                 400,
             );
-
-        const gradeToUpdate = Object.fromEntries(
-            Object.entries({
-                name,
-                obtainedValue,
-                maxValue,
-                weight,
-                date,
-            }).filter(([_, value]) => value !== undefined),
-        );
-
-        if (Object.entries(gradeToUpdate).length === 0)
-            throw new AppError("Sem modificações para atualizar!", 400);
+        }
 
         const gradeUpdated = await prisma.grade.update({
             where: { id: id_grade, enrollmentId: id_enrollment },
-            data: gradeToUpdate,
+            data: { name, obtainedValue, maxValue, weight, date },
             include: { enrollment: true },
         });
 
