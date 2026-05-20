@@ -8,23 +8,26 @@ import express, {
 import cors from "cors";
 
 import { AppError } from "./shared/errors/AppError";
+
+import { authRoutes } from "./modules/auth/routes/auth.routes";
+import { dashboardRoutes } from "./modules/dashboard/dashboard.routes";
+
 import { periodRoutes } from "./modules/period/period.routes";
 import { courseRoutes } from "./modules/course/course.routes";
 import { enrollmentRoutes } from "./modules/enrollment/enrollment.routes";
 import { taskRoutes } from "./modules/task/task.routes";
-
-import { dashboardRoutes } from "./modules/dashboard/dashboard.routes";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
+app.use("/auth", authRoutes);
+app.use("/dashboard", dashboardRoutes);
 app.use("/periods", periodRoutes);
 app.use("/courses", courseRoutes);
 app.use("/enrollments", enrollmentRoutes);
 app.use("/tasks", taskRoutes);
-app.use("/dashboard", dashboardRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
