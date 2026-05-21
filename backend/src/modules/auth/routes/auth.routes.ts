@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 
 import { validateSchema } from "../middlewares/validate-schema";
 import { registerSchema } from "../schemas/register-schema";
@@ -15,13 +15,13 @@ const authController = new AuthController(authService);
 authRoutes.post(
     "/register",
     validateSchema(registerSchema),
-    authController.register,
+    (req: Request, res: Response) => authController.register(req, res)
 );
 
 authRoutes.post(
     "/login",
     validateSchema(loginSchema),
-    authController.login
+    (req: Request, res: Response) => authController.login(req, res)
 )
 
 export { authRoutes };
