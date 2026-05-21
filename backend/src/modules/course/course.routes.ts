@@ -2,16 +2,17 @@ import { Router, Request, Response } from "express";
 
 import { CourseService } from "./course.service";
 import { CourseController } from "./course.controller";
+import { authMiddleware } from "../../shared/middlewares/authMiddleware";
 
 const courserService = new CourseService();
 const courseController = new CourseController(courserService);
 
 const courseRoutes = Router();
 
-courseRoutes.post("/", (req: Request, res: Response) =>
+courseRoutes.post("/", authMiddleware, (req: Request, res: Response) =>
     courseController.create(req, res),
 );
-courseRoutes.get("/", (req: Request, res: Response) =>
+courseRoutes.get("/", authMiddleware, (req: Request, res: Response) =>
     courseController.list(req, res),
 );
 
