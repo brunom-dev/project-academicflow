@@ -4,7 +4,6 @@ import { prisma } from "../../../shared/lib/prisma";
 import { RegisterSchema } from "../schemas/register-schema";
 import { LoginSchema } from "../schemas/login-schema";
 import jwt from "jsonwebtoken";
-import env from "dotenv";
 
 export class AuthService {
     async register({ name, email, password }: RegisterSchema) {
@@ -20,7 +19,11 @@ export class AuthService {
             data: { name, email, password: hashedPassword },
         });
 
-        return user;
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        };
     }
 
     async login({ email, password }: LoginSchema) {
@@ -32,7 +35,7 @@ export class AuthService {
 
         const passwordChecked = await bcrypt.compare(password, user.password);
 
-        if (!password) throw new AppError("Email/Password Inválidos");
+        if (!passwordChecked) throw new AppError("Email/Password Inválidos");
 
         const tokenJWT = jwt.sign(
             {sub: user.id},
